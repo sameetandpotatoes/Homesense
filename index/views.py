@@ -8,6 +8,7 @@ from forms import LoginForm, GroupForm, SensorForm
 from models import Group, Sensor
 import json
 import helper
+import requests
 from django.shortcuts import *
 
 @login_required(login_url='/login')
@@ -54,6 +55,10 @@ def new_group(request):
     else:
         form = GroupForm()
     return render_to_response('new_group.html', { 'form' : form }, context_instance=RequestContext(request))
+
+def get_data_sensors(request):
+    r = requests.get("https://homesensing.cfapps.io/data")
+    return HttpResponse(r.text, content_type='application/json')
 
 def home(request):
     if request.user.is_authenticated():

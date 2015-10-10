@@ -20,5 +20,48 @@
 {% endfor %}
 
 <a href="/new_group/" class="button success" style="display: table;">New Group</a>
+<table>
+  <thead>
+    <tr>
+      <td>Insight</td>
+      <td>Group ID</td>
+      <td>Sensor ID</td>
+      <td>Data</td>
+      <td>Recommendations</td>
+    </tr>
+  </thead>
+  <tbody class="body">
+  </tbody>
+</table>
+<!-- Log Stuff -->
+<script type="text/javascript">
+  function updateLogs(){
+      $.ajax({
+        type: "GET",
+        url: "/data_sensors",
+        contentType: "application/json",
+        dataType: "text",
+        success: function(data){
+          $(".body").empty();
+          var jsonData = JSON.parse(data);
+          for (var i = 0; i < jsonData.length; i++){
+            data_received = jsonData[i].data;
+            var insights = "<td>"+data_received["insight"]+"</td>";
+            var group_id = "<td>"+data_received["groupId"]+"</td>";
+            var sensor_id = "<td>"+data_received["sensorId"]+"</td>";
+            var data = "<td>"+JSON.stringify(data_received["data"])+"</td>";
+            var recs = "<td>"+JSON.stringify(data_received["recommendations"])+"</td>";
+            var tr = "<tr>" + insights + group_id + sensor_id + data + "</tr>";
+            $(".body").append(tr);
+          }
+        },
+        error: function(a, b, c){
+          console.log(a);
+          console.log(b);
+        }
+      });
+  }
+  setInterval("updateLogs()", 1000);
+</script>
 
 {% endblock %}
