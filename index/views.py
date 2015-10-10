@@ -18,7 +18,28 @@ def index(request):
 def show_group(request, name):
     group = Group.objects.get(name=name)
     sensors = group.sensor_set.all()
-    return render_to_response('index_sensors.html', { 'sensors' : sensors })
+    return render_to_response('index_sensors.html', { 'sensors' : sensors, 'group_name' : group.name })
+
+def new_sensor(request, name):
+    group = Group.objects.get(name=name)
+    if request.method == 'POST':
+        form = SensorForm(request.POST)
+        if form.is_valid():
+            payload = {}
+            payload['sensorType'] = form.cleaned_data['sensorType']
+            payload['zipCode'] = form.cleaned_data['zipCode']
+            url = "https://a6.cfapps.io/groups/" + str(group.code) + "/sensors"
+            result = json.loads(helper.post_request(url, {}))
+            s = Sensor.objects.create(group_id=group.id,
+                                    name=form.cleaned_data['name'],
+                                    sensorType=payload['sensorType'],
+                                    zipCode=payload['zipCode'],
+                                    code=result['sensorId'])
+            s.save()
+            return HttpResponseRedirect("/group/"+group.name)
+    else:
+        form = SensorForm()
+    return render_to_response('new_sensor.html', { 'form' : form, 'group_name': group.name }, context_instance=RequestContext(request))
 
 def new_group(request):
     if request.method == 'POST':

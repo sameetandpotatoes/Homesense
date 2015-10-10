@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+<h3>Showing sensors for {{ group_name }}</h3>
 <ul>
   {% for s in sensors %}
   <li>
       Name: {{s.name}}
+      Code: {{s.code}}
   </li>
   {% endfor %}
 </ul>
+
+<a href="/new_sensor/{{group_name}}">Create new sensor for {{ group_name }}</a>
 
 {% endblock %}

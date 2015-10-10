@@ -19,4 +19,6 @@ class GroupForm(forms.Form):
     name= forms.CharField(max_length = 100)
 
 class SensorForm(forms.Form):
-    name= forms.CharField(max_length = 100)
+    name = forms.CharField(max_length = 100)
+    zipCode = forms.CharField(max_length=5)
+    sensorType = forms.CharField(max_length=50)
