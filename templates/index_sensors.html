@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul>
+  {% for s in sensors %}
+  <li>
+      Name: {{s.name}}
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

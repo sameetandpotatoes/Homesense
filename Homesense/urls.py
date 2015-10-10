@@ -15,11 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.views.generic.edit import CreateView
-from django.contrib.auth.forms import UserCreationForm
 
 urlpatterns = [
-    url(r'^login/$', 'django.contrib.auth.views.login'),
-    url('^accounts/', include('django.contrib.auth.urls')),
-    url(r'^$', include('index.urls'))
+    url(r'', include('index.urls')),
 ]

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<ul>
+  {% for g in groups %}
+  <li>
+      <a href="/group/{{g.name}}"+>
+        Name: {{g.name}}
+        Code: {{g.code}}
+      </a>
+  </li>
+  {% endfor %}
+</ul>
+
+<a href="/new_group/">New Group</a>
+
+{% endblock %}
