@@ -55,13 +55,17 @@
 
             var data = "<td>";
             for (var key in data_received["data"]){
+              var print_key = key;
               var status;
-              if (key == "tripSummaryUpload"){
+              if (key == "vehicleHealthUpload"){
+                  print_key = "Direction from home";
+                  status = (data_received["data"][key] == "true") ? "you are coming home" : "you are leaving home";
+              } else if (key == "tripSummaryUpload"){
                   status = (parseInt(data_received["data"][key]) >= 5) ? "far away" : "near" ;
               } else{
                   status = (data_received["data"][key] == "true") ? "activated" : "deactivated";
               }
-              data += ("<b>"+key+"</b>" + " was " + status + "<br/>");
+              data += ("<b>"+print_key+"</b>" + " was " + status + "<br/>");
             }
             data += "</td>";
 
