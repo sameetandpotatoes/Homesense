@@ -6,6 +6,6 @@ def get_request(url):
     return r.content
 
 def post_request(url, payload):
-    headers = {'content-type': 'application/json'}
+    headers = {'Content-Type': 'application/json'}
     r = requests.post(url, data=json.dumps(payload), headers=headers)
     return r.content

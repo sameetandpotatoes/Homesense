@@ -1,11 +1,10 @@
 from index import helper
-
-groupId = "0083ef41-ed9c-43f1-99a4-6a714d73ecb7"
-sensorId = "8ee163bc-9e7e-4d4e-a584-abfb78e71613"
+# Should close both
+groupId = "b679a3c5-6349-4d86-b05e-e75338f2be86"
+sensorId = "4777e5c2-4750-4e31-9308-411b4b7fb6d3"
 payload = {}
 payload["homeWindowOpen"] = "true"
 payload["homeGarageOpen"] = "true"
 url = "https://a6.cfapps.io/groups/"+groupId+"/sensors/"+sensorId+"/data"
-print url
 data = helper.post_request(url, payload)
 print data

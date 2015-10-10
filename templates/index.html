@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-
+<h1>Showing all Groups</h1>
 {% for g in groups %}
 <ul class="pricing-table">
   <li class="price group">
@@ -20,20 +20,22 @@
 {% endfor %}
 
 <a href="/new_group/" class="button success" style="display: table;">New Group</a>
-<table>
+
+<h1>Logs</h1>
+<table role="grid">
   <thead>
     <tr>
+      <td>Time</td>
       <td>Insight</td>
-      <td>Group ID</td>
-      <td>Sensor ID</td>
-      <td>Data</td>
+      <td>Group Name</td>
+      <td>Sensor Name</td>
+      <td>Sensor Activated</td>
       <td>Recommendations</td>
     </tr>
   </thead>
   <tbody class="body">
   </tbody>
 </table>
-<!-- Log Stuff -->
 <script type="text/javascript">
   function updateLogs(){
       $.ajax({
@@ -46,12 +48,31 @@
           var jsonData = JSON.parse(data);
           for (var i = 0; i < jsonData.length; i++){
             data_received = jsonData[i].data;
+            var signature = "<td>" + jsonData[i]["signature"] + "</td>";
             var insights = "<td>"+data_received["insight"]+"</td>";
             var group_id = "<td>"+data_received["groupId"]+"</td>";
             var sensor_id = "<td>"+data_received["sensorId"]+"</td>";
-            var data = "<td>"+JSON.stringify(data_received["data"])+"</td>";
-            var recs = "<td>"+JSON.stringify(data_received["recommendations"])+"</td>";
-            var tr = "<tr>" + insights + group_id + sensor_id + data + "</tr>";
+
+            var data = "<td>";
+            for (var key in data_received["data"]){
+              var status;
+              if (key == "tripSummaryUpload"){
+                  status = (parseInt(data_received["data"][key]) >= 5) ? "far away" : "near" ;
+              } else{
+                  status = (data_received["data"][key] == "true") ? "activated" : "deactivated";
+              }
+              data += ("<b>"+key+"</b>" + " was " + status + "<br/>");
+            }
+            data += "</td>";
+
+            var recs = "<td>";
+            for (var key in jsonData[i]["recommendations"]){
+              var status = (jsonData[i]["recommendations"][key] == "true") ? "activated": "deactivated";
+              recs += ("<b>"+key+"</b>" + " should be " + status  + "<br/>");
+            }
+            recs += "</td>";
+
+            var tr = "<tr>" + signature + insights + group_id + sensor_id + data + recs + "</tr>";
             $(".body").append(tr);
           }
         },
@@ -62,6 +83,7 @@
       });
   }
   setInterval("updateLogs()", 1000);
+  updateLogs()
 </script>
 
 {% endblock %}

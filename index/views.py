@@ -32,6 +32,7 @@ def new_sensor(request, name):
             payload['zipCode'] = form.cleaned_data['zipCode']
             url = "https://a6.cfapps.io/groups/" + str(group.code) + "/sensors"
             result = json.loads(helper.post_request(url, {}))
+            print result
             s = Sensor.objects.create(group_id=group.id,
                                     name=form.cleaned_data['name'],
                                     sensorType=payload['sensorType'],
@@ -51,6 +52,27 @@ def new_group(request):
             groupID = json.loads(group_code)['groupId']
             group = Group.objects.create(code=groupID, name=form.cleaned_data['name'])
             group.save()
+            #Create a new subscription for group
+            url = "https://a6.cfapps.io/subscriptions"
+            payload = {}
+            payload['groupId'] = group.code
+            payload['insights'] = [
+                "home.window.open",
+                "home.window.closed",
+                "home.garage.open",
+                "home.garage.closed",
+                "home.smoke.alarm_on",
+                "home.smoke.alarm_off",
+                "home.smoke.alarm_battery_low",
+                "home.fire.alarm_on",
+                "home.fire.alarm_off",
+                "home.water.sensor.alarm_on",
+                "home.water.sensor.alarm_off",
+                "vehicle.trip.arrived",
+                "vehicle.health.arrived"]
+            payload['webhookUrl'] = 'https://homesensing.cfapps.io/callback'
+            result = helper.post_request(url, payload)
+            print result
             return HttpResponseRedirect("/index")
     else:
         form = GroupForm()
@@ -58,7 +80,18 @@ def new_group(request):
 
 def get_data_sensors(request):
     r = requests.get("https://homesensing.cfapps.io/data")
-    return HttpResponse(r.text, content_type='application/json')
+    raw = r.json()
+    raw = sorted(raw, key=lambda x: x['signature'], reverse=True)
+    for outer_json in raw:
+        data = outer_json["data"]
+        for key in data:
+            if key == 'sensorId':
+                s = Sensor.objects.get(code=data[key])
+                outer_json["data"][key] = s.name
+            elif key == 'groupId':
+                g = Group.objects.get(code=data[key])
+                outer_json["data"][key] = g.name
+    return HttpResponse(json.dumps(raw), content_type='application/json')
 
 def home(request):
     if request.user.is_authenticated():
