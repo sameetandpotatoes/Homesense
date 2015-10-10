@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import auth
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -55,10 +56,15 @@ def new_group(request):
     return render_to_response('new_group.html', { 'form' : form }, context_instance=RequestContext(request))
 
 def home(request):
-    return render_to_response('home.html')
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/index")
+    else:
+        return render_to_response('home.html')
 
-#Switch to UserForm?
 def login(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/index")
+
     if request.method =='POST':
          try:
              User.objects.get(username=request.POST['username'])
@@ -74,6 +80,9 @@ def login(request):
                                     context_instance=RequestContext(request))
 
 def register(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/index")
+
     if request.method =='POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -88,3 +97,7 @@ def register(request):
         return render_to_response('registration/register.html',
                                 { 'form': form },
                                 context_instance=RequestContext(request))
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect("/")

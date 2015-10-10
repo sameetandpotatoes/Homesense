@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post" action="/new_sensor/{{group_name}}">
+{% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" class="button success" value="Create new sensor" />
+</form>
+{% endblock %}

@@ -3,6 +3,6 @@
 <form method="post" action="{% url 'new_group' %}">
 {% csrf_token %}
   {{ form.as_p }}
-  <input type="submit" value="Create new group" />
+  <input type="submit" class="button success" value="Create new group" />
 </form>
 {% endblock %}

@@ -1,15 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
-<h3>Showing sensors for {{ group_name }}</h3>
-<ul>
-  {% for s in sensors %}
-  <li>
-      Name: {{s.name}}
-      Code: {{s.code}}
-  </li>
-  {% endfor %}
-</ul>
+<h3>Group {{ group_name }}'s Sensors</h3>
+{% for s in sensors %}
+  <ul class="pricing-table sensors">
+    <li class="title">
+        {{s.name}}
+    </li>
+    <li class="bullet-item">
+        Code: {{s.code}}
+    </li>
+    <li class="bullet-item">
+        Sensor Type: {{s.sensorType}}
+    </li>
+    <li class="bullet-item">
+        Zip Code: {{s.zipCode}}
+    </li>
+  </ul>
+{% endfor %}
 
-<a href="/new_sensor/{{group_name}}">Create new sensor for {{ group_name }}</a>
+<a href="/new_sensor/{{group_name}}" class="button success" style="display: table;">Create new sensor for {{ group_name }}</a>
 
 {% endblock %}

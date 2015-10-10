@@ -1,0 +1,30 @@
+header.top-bar {
+  height: 80px;
+}
+.header-link{
+  color: white;
+}
+header.top-bar > h1{
+  color: white;
+  margin-left: 0.5em;
+}
+.main-content{
+  margin: 4em 1em;
+}
+.price > *{
+  color: #333333;
+}
+.price.group{
+  text-decoration: underline;
+}
+.price > a{
+  display: block;
+  text-align: left;
+  font-size: 0.75em;
+}
+
+.pricing-table{
+  display: inline-block;
+  width: 48%;
+  margin: 2em 0;
+}

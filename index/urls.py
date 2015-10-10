@@ -2,6 +2,7 @@ from django.conf.urls import patterns, url
 from index import views
 urlpatterns = patterns('',
     url(r'^login', views.login, name='login'),
+    url(r'^logout', views.logout, name='logout'),
     url(r'^register', views.register, name='register'),
     url(r'^index', views.index, name='index'),
     url(r'^group/(?P<name>\w{1,50})', views.show_group, name='show_group'),

@@ -1,17 +1,24 @@
 {% extends 'base.html' %}
+
+{% block logout %}
+<a href="/logout" class="button error" style="float: right; margin: 0; padding: 5px 10px;">Logout</a>
+{% endblock %}
+
 {% block content %}
 
-<ul>
-  {% for g in groups %}
-  <li>
-      <a href="/group/{{g.name}}"+>
-        Name: {{g.name}}
-        Code: {{g.code}}
-      </a>
+{% for g in groups %}
+<ul class="pricing-table">
+  <li class="price group">
+    <a href="/group/{{g.name}}"+>
+        Group Name: {{g.name}}
+    </a>
   </li>
-  {% endfor %}
+  <li class="description">
+    Code: {{g.code}}
+  </li>
 </ul>
+{% endfor %}
 
-<a href="/new_group/">New Group</a>
+<a href="/new_group/" class="button success" style="display: table;">New Group</a>
 
 {% endblock %}
